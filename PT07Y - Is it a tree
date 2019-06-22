@@ -1,0 +1,69 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define fr(i,n) for(ll i=0;i<n;i++)
+#define vl vector<ll>
+#define vll vector<ll,ll>
+#define vpl vector< pair<ll,ll> >
+#define pb push_back
+#define ft first
+#define sd second
+#define bn begin()
+#define ed end()
+// Author gyanendra singh panwar :
+
+int main()
+{
+	ios_base::sync_with_stdio(NULL);
+    cin.tie(NULL);
+    int n,e,l,m;
+    vector<int> v[10001];
+    vector<int> :: iterator itr;
+    map<int,int> mapp;
+    bool visited[10001];
+    list<int> queue;
+    memset(visited,0,sizeof visited);
+    bool ck = true;
+    
+    cin>>n>>e;
+    cin>>l>>m;
+    queue.pb(l);
+    mapp[l]=0;
+    v[l].pb(m);
+    visited[l]=1;
+    int edge = e;
+    
+    while(edge>1)
+    { 
+    	cin>>l>>m;
+    	v[l].pb(m);
+    	edge--;
+	}
+
+    	while(!queue.empty())
+    	{
+    		int s =queue.front();
+    		queue.pop_front();
+    		
+    		for(itr = v[s].bn;itr!=v[s].ed;itr++)
+    		{
+    			if(visited[*itr] and mapp[s]!=(*itr) )
+    			{
+    				ck =false;
+    				break;
+				}
+				else if(visited[*itr]==false)
+				queue.pb(*itr),visited[*itr]=true,mapp[*itr]=s;
+			}
+			if(ck==false)
+			break;
+			
+		}
+		for(int i=1;i<=n;i++)
+		if(visited[i]==false)
+		ck=false;
+		
+		ck?cout<<"YES":cout<<"NO";
+    
+}
+
