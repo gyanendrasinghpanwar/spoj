@@ -1,0 +1,107 @@
+//  https://www.spoj.com/problems/LABYR1/
+
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define fr(i,n) for(ll i=0;i<n;i++)
+#define vl vector<ll>
+#define vll vector<ll,ll>
+#define vpl vector< pair<ll,ll> >
+#define pb push_back
+#define ft first
+#define sd second
+#define bn begin()
+#define ed end()
+#define mp make_pair
+// Author gyanendra singh panwar :
+
+struct answer{
+	int mx;
+	int x,y;
+};
+
+bool check(int row , int col,int n,int m)
+{
+	if(row>=0 and col>=0 and row<m and col<n )
+	return true;
+	else
+	return false;
+}
+
+int main()
+{
+	ios_base::sync_with_stdio(NULL);
+    cin.tie(NULL);
+    int t;
+    cin>>t;
+    vector< pair<int,int> > vect ;
+    vector< pair<int,int> > :: iterator itr;
+    vect.pb(mp(-1,0));
+    vect.pb(mp( 1,0));
+    vect.pb(mp(0,-1));
+    vect.pb(mp(0, 1));
+    
+    while(t--)
+    {
+    	int n,m,i=0,j=0,two=2;
+    	struct answer ans;
+    	
+    	pair<int,int > s;
+    	s.ft= -1,s.sd =-1;
+    	
+    	cin>>n>>m;
+    	
+    	bool visited[m][n]; 
+    	string str[m];
+    	
+    	for(i=0;i<m;i++)
+    	cin>>str[i];
+    	
+    	for(i=0;i<m;i++)
+    	for(j=0;j<n;j++)
+    	if(str[i][j]=='.')
+    	s.ft=i,s.sd=j,i=m,j=n;
+    	
+    	ans.mx =0;
+    	ans.x=s.ft,ans.y=s.sd;
+    	if(s.ft!=-1 and s.sd!=-1)
+    	{
+    		while(two--){
+    		// for 2 times bfs
+    	
+    		list< pair<int,int> > q;
+    		map<int, map<int,int> > mapp;
+    		memset(visited, 0, sizeof visited);   // making visited false 
+    		
+    		q.pb(s);
+    		visited[s.ft][s.sd] = true;
+    		mapp[s.ft][s.sd] = 0;
+    		ans.mx = 0;
+    		
+    		while(!q.empty())
+    		{
+    			int a = q.front().ft, b = q.front().sd;
+				q.pop_front();
+				
+				for(itr=vect.bn;itr!=vect.ed;itr++)
+				{
+					int row = itr->ft+a;
+					int col = itr->sd+b;
+					
+					if( (check(row,col,n,m)) and str[row][col]=='.' and visited[row][col] == false)
+					{
+						q.pb(mp(row,col)),visited[row][col] = true , mapp[row][col] = mapp[a][b] +1;
+						if(mapp[row][col] > ans.mx)
+						ans.mx = mapp[row][col],ans.x=row,ans.y=col;
+					}
+				}
+			}
+			s.ft=ans.x,s.sd=ans.y;
+			} //while of two
+			// bfs ends here
+		}
+		cout<<"Maximum rope length is "<<ans.mx<<"."<<endl;
+		
+	}
+}
+
