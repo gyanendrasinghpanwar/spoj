@@ -1,0 +1,71 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define fr(i,n) for(ll i=0;i<n;i++)
+#define vl vector<ll>
+#define vll vector<ll,ll>
+#define vpl vector< pair<ll,ll> >
+#define pb push_back
+#define ft first
+#define sd second
+#define bn begin()
+#define ed end()
+// Author gyanendra singh panwar :
+// dfs
+
+int n,e,l,m;
+vector<int> v[10001];
+map<int,int> mapp;
+bool visited[10001];
+list<int> queue;
+
+bool dfs(int root)
+{
+	visited[root] = true;
+	vector<int> :: iterator itr;
+	
+	for(itr=v[root].bn;itr!=v[root].ed;itr++)
+	{
+		if(visited[*itr]==false)
+		{
+			mapp[*itr] = root ;
+			if(dfs(*itr) == false )
+			return false;
+		}
+		
+		else if(mapp[root] != (*itr))
+		return false;
+	}
+	
+	return true;
+}
+
+int main()
+{
+	//ios_base::sync_with_stdio(NULL);
+    //cin.tie(NULL);
+    
+    cin>>n>>e;
+    memset(visited,0,sizeof visited);
+    
+    cin>>l>>m;
+    mapp[l]=0;
+    v[l].pb(m);
+    v[m].pb(l);
+    int root = l;
+    
+    while(e>1)
+    {
+    	cin>>l>>m;
+    	v[l].pb(m);
+    	v[m].pb(l);
+    	e--;
+	}
+    
+    int ck = dfs(root);
+    for(int i=1;i<=n;i++)
+    if(visited[i]==false)
+    ck =false,i=n;
+    
+    ck?cout<<"YES":cout<<"NO";
+}
