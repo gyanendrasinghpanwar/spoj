@@ -1,0 +1,101 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define fr(i,n) for(ll i=0;i<n;i++)
+#define vl vector<ll>
+#define vll vector<ll,ll>
+#define vpl vector< pair<ll,ll> >
+#define pb push_back
+#define ft first
+#define sd second
+#define bn begin()
+#define ed end()
+// Author gyanendra singh panwar :
+
+set< pair<int,int> > s;
+vector< pair<int,int> > mapp;
+int n,e,l,m;
+
+// A utility function to find set of an element i 
+// (uses path compression technique) 
+int find(int i) 
+{ 
+    // find root and make root as parent of i (path compression) 
+    if (mapp[i].ft != i) 
+    mapp[i].ft = find(mapp[i].ft); 
+  
+    return mapp[i].ft; 
+} 
+
+void dounion(int x,int y)
+{
+	int xroot = find(x); 
+    int yroot = find(y); 
+    
+    // Attach smaller rank tree under root of high rank tree 
+    // (Union by Rank) 
+    if (mapp[xroot].sd < mapp[yroot].sd) 
+    mapp[xroot].ft = yroot; 
+    
+    else if (mapp[xroot].sd > mapp[yroot].sd) 
+    mapp[yroot].ft = xroot; 
+  
+    // If ranks are same, then make one as root and increment 
+    // its rank by one 
+    else
+    { 
+        mapp[yroot].ft = xroot; 
+        mapp[xroot].sd+=1; 
+    } 
+}
+
+int iscycle()
+{
+	set< pair<int,int> > :: iterator itr;
+	
+	for(itr=s.bn;itr!=s.ed;itr++)
+	{
+		int x = find(itr->ft);
+		int y = find(itr->sd);
+		
+		if(x==y)
+		return 0;
+		
+		dounion(x,y);
+ 	}
+ 	
+ 	return 1;
+}
+
+int main()
+{
+	cin>>n>>e;
+	int count=0;
+	
+	while(e--)
+	{
+		cin>>l>>m;
+		if(l!=m)
+		{
+			int mn = min(l,m);    // to avoid 1 2 , 2 1 , 1 2 again and again
+			int mx = max(l,m);
+			s.insert( make_pair(mn,mx) );  // edges
+		}
+	}
+	mapp.pb( make_pair(0,0) ) ;
+	for(int i=1;i<=n;i++)
+	mapp.pb( make_pair(i,0) ) ;      // first denotes parent , second is rank 
+	
+	int ck = iscycle();
+	
+	for(int i=1;i<=n;i++)
+	if(mapp[i].ft==i)
+	count++;
+	
+	if(ck and count==1)
+	cout<<"YES";
+	else
+	cout<<"NO";
+	
+}
+
