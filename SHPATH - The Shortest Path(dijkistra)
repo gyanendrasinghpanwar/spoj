@@ -1,0 +1,89 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int> iPair;
+#define fr(i,n) for(ll i=0;i<n;i++)
+#define vl vector<ll>
+#define vll vector<ll,ll>
+#define vpl vector< pair<ll,ll> >
+#define pb push_back
+#define ft first
+#define sd second
+#define bn begin()
+#define ed end()
+#define mp make_pair
+
+// Author gyanendra singh panwar :
+
+int main()
+{
+	ios_base::sync_with_stdio(NULL);
+    cin.tie(NULL);
+    int t;
+    cin>>t;
+    while(t--)
+    {
+    	vector< pair<int,int> > vect[10001];
+    	map<string , int > m;
+    	int n,r;
+    	cin>>n;
+    	for(int u=1;u<=n;u++)
+    	{
+    		string name;
+    		int p;
+    		cin>>name;
+    		cin>>p;
+    		m[name]= u ;
+    		while(p--)
+    		{
+    			int v,w;
+    			cin>>v>>w;
+    			vect[u].pb(mp(v,w));
+			}
+    	}
+    	
+    	cin>>r;  // no of path to find
+    	while(r--)
+    	{
+    		string s,d;
+    		cin>>s>>d;
+    		
+    		int src = m[s] ,dest = m [d];
+    		
+    		vector<int> dist(n+1,  200001);
+    		priority_queue< iPair, vector <iPair> , greater<iPair> > pq;
+    		
+    		pq.push(make_pair(0, src)); 
+    		dist[src] = 0;  
+    		
+    		while (!pq.empty()) 
+    		{ 
+        		int u = pq.top().second; 
+        		pq.pop(); 
+        		
+        		if(u == dest)
+        		{
+        			cout<<dist[u]<<endl;
+        			break;
+				}
+   
+        		vector< pair<int, int> >::iterator i; 
+        		for (i = vect[u].begin(); i != vect[u].end(); ++i) 
+        		{ 
+            		int v = (*i).first; 
+            		int weight = (*i).second; 
+  
+            		if (dist[v] > dist[u] + weight) 
+            		{ 
+                		dist[v] = dist[u] + weight; 
+                		pq.push(make_pair(dist[v], v)); 
+            		} 
+        		} 
+        	
+    		} 
+    		
+		} //  while of r--
+    	
+	} // test case while
+}
+
