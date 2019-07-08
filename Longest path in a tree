@@ -1,0 +1,75 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define fr(i,n) for(ll i=0;i<n;i++)
+#define vl vector<ll>
+#define vll vector<ll,ll>
+#define vpl vector< pair<ll,ll> >
+#define pb push_back
+#define ft first
+#define sd second
+#define bn begin()
+#define ed end()
+// Author gyanendra singh panwar :
+
+int main()
+{
+	//ios_base::sync_with_stdio(NULL);
+    //cin.tie(NULL);
+   
+    	int n,x,y,two = 2,s,ans=0;
+    	cin>>n;
+    	cin>>x>>y;
+    	
+    	bool visited[n+1];
+    	vector<int> v[n+1];
+    	vector<int> :: iterator itr;
+//    	pair<int,int> p;
+    	
+    	memset(visited,0,sizeof(visited)) ;
+    	s = x;
+    	v[x].pb(y);
+    	v[y].pb(x);
+    	visited[x] = 1;
+    	
+    	while(n > 2)
+    	{
+    		cin>>x>>y;
+    		v[x].pb(y);
+    		v[y].pb(x);
+    		n--;
+		}
+		while(two--)
+		{
+			list<int> q;
+    		map<int,int> mapp;
+    		mapp.clear();
+    		memset(visited, 0, sizeof(visited) );  
+    		
+    		q.pb(s);
+    		visited[s]=1;
+    		mapp[s] = 0;
+    		ans=0;
+    		
+    		while(!q.empty())
+    		{
+    			int a=q.front();
+    			q.pop_front();
+    			for(itr=v[a].bn;itr!=v[a].ed;itr++)
+    			{
+    				if(!visited[*itr])
+    				{
+    					q.pb(*itr);
+    					mapp[*itr] =mapp[a] + 1;
+    					visited[*itr]=1;
+    					if(mapp[*itr]>ans)
+    					ans=mapp[*itr],s=*itr;
+					}
+				}
+			}
+		}
+		
+		cout<<ans<<endl;
+	
+}
+
