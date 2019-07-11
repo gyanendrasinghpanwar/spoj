@@ -15,7 +15,7 @@ typedef long long ll;
 map<int,int> m;	
 vector<int>v[8001];
 vector<int> ::iterator itr;
-vector<int>v1;
+
 int buildtree(int pre[], int in[], int start, int end)
 {
 	static int preindex = 0;
@@ -37,30 +37,40 @@ int buildtree(int pre[], int in[], int start, int end)
 	return root ;
 }
 
-void postorder(int u,int post[])
-{ 
+int postorder(int u,int post[])
+{
+	static int j = 0;
     if(v[u].empty())
     {
-    	if(u!=-1)
-    	v1.pb(u);
-    	return;
+    	if(post[j++]!=u)
+    	return 0;
+    		
+    	return 1;
 	}
     
-	if(u!=-1)		
-	postorder(v[u][0],post);
-	if(u!=-1)
-	postorder(v[u][1],post);
+	if(v[u][0]!=-1)		
+	if( !postorder(v[u][0],post) )
+	return 0;
 	
-	if(u!=-1)
-	v1.pb(u);
+	if(v[u][1]!=-1)
+	if( !postorder(v[u][1],post) )
+	return 0;
+	
+	if(post[j++]!=u)
+    return 0;
+	
+	return 1;
 }
 	
+
 int main()
 {
 	int n,i;
 	cin>>n;
 	
 	int pre[n],post[n],in[n];
+	
+	
 	fr(i,n)
 	cin>>pre[i];
 	fr(i,n)
@@ -72,19 +82,11 @@ int main()
 	}
 	
 	int ans=buildtree(pre,in,0,n-1);
-	postorder(pre[0],post);
-	int flag=0;
-	for(i=0;i<n;i++)
-	if(post[i]==v1[i])
-	continue;
-	else
-	{
-		flag=1;
-		break;
-	}
-	if(flag)
-	cout<<"no";
-	else
+	
+	if( postorder(pre[0],post) )
 	cout<<"yes";
+	else
+	cout<<"no";
+	
 }
 
