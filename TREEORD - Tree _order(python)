@@ -1,0 +1,69 @@
+from collections import defaultdict
+
+preindex = 0
+j=0
+v = defaultdict(list)
+m = defaultdict(int)
+
+def buildtree(pre, ino, start, end):
+    
+    if(start>end):
+        return -1
+        
+    root = pre[preindex]
+    index = m[pre[preindex]]
+    preindex+=1
+    
+    if(start == end ):
+        return ino[start]
+        
+    left = buildtree(pre, ino, start, index-1)
+    v[root].append(left)
+    
+    left = buildtree(pre, ino, index+1, end)
+    v[root].append(left)
+    
+    return root
+    
+def postorder(u,post):
+    
+    if(v[u]):
+        if(post[j]!=u):
+            j+=1
+            return 0
+            return 1
+            
+    if(v[u][0]!=-1):
+        if(postorder(v[u][0],post)==0):
+            return 0
+            
+    if(v[u][1]!=-1):
+        if(postorder(v[u][1],post)==0):
+            return 0
+            
+    if(post[j]!=u):
+            j+=1
+            return 0
+            
+    return 1
+    
+
+n = int(input())
+pre = list( map(int,input().split()) )
+post =list( map(int,input().split()) )
+ino = list( map(int,input().split()) )
+
+for i in range(0,n):
+    m[ino[i]] = i
+
+fargi = buildtree(pre, ino, 0, n-1)
+
+if(postorder(pre[0],post)):
+    print("yes")
+else:
+    print("no")
+
+
+
+
+
