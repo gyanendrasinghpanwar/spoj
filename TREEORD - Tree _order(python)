@@ -1,11 +1,11 @@
 from collections import defaultdict
 
-preindex = 0
+preindex = 0 
 j=0
-v = defaultdict(list)
-m = defaultdict(int)
 
-def buildtree(pre, ino, start, end):
+def buildtree(pre, ino, start, end, v, m):
+    
+    global preindex
     
     if(start>end):
         return -1
@@ -17,15 +17,17 @@ def buildtree(pre, ino, start, end):
     if(start == end ):
         return ino[start]
         
-    left = buildtree(pre, ino, start, index-1)
+    left = buildtree(pre, ino, start, index-1, v, m)
     v[root].append(left)
     
-    left = buildtree(pre, ino, index+1, end)
+    left = buildtree(pre, ino, index+1, end, v, m)
     v[root].append(left)
     
     return root
     
-def postorder(u,post):
+def postorder(u, post, v):
+    
+    global j
     
     if(v[u]):
         if(post[j]!=u):
@@ -53,17 +55,15 @@ pre = list( map(int,input().split()) )
 post =list( map(int,input().split()) )
 ino = list( map(int,input().split()) )
 
+v = defaultdict(list)
+m = defaultdict(int)
+
 for i in range(0,n):
     m[ino[i]] = i
 
-fargi = buildtree(pre, ino, 0, n-1)
+fargi = buildtree(pre, ino, 0, n-1, v, m)
 
-if(postorder(pre[0],post)):
+if( postorder(pre[0], post, v) ):
     print("yes")
 else:
     print("no")
-
-
-
-
-
