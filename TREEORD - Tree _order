@@ -1,0 +1,90 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define fr(i,n) for(i=0;i<n;i++)
+#define vl vector<ll>
+#define vll vector<ll,ll>
+#define vpl vector< pair<ll,ll> >
+#define pb push_back
+#define ft first
+#define sd second
+#define bn begin()
+#define ed end()
+// Author gyanendra singh panwar :
+
+map<int,int> m;	
+vector<int>v[8001];
+vector<int> ::iterator itr;
+vector<int>v1;
+int buildtree(int pre[], int in[], int start, int end)
+{
+	static int preindex = 0;
+	if(start>end)
+	return -1;
+	
+	int root=pre[preindex];
+	int index = m[pre[preindex++]];
+	
+	if(start==end)
+	return in[start];
+	
+	int left = buildtree(pre,in,start,index-1) ;
+	v[root].pb(left);
+	
+	int right = buildtree(pre,in,index+1,end ) ;
+	v[root].pb(right);
+	
+	return root ;
+}
+
+void postorder(int u,int post[])
+{ 
+    if(v[u].empty())
+    {
+    	if(u!=-1)
+    	v1.pb(u);
+    	return;
+	}
+    
+	if(u!=-1)		
+	postorder(v[u][0],post);
+	if(u!=-1)
+	postorder(v[u][1],post);
+	
+	if(u!=-1)
+	v1.pb(u);
+}
+	
+int main()
+{
+	int n,i;
+	cin>>n;
+	
+	int pre[n],post[n],in[n];
+	fr(i,n)
+	cin>>pre[i];
+	fr(i,n)
+	cin>>post[i];
+	fr(i,n)
+	{
+		cin>>in[i];
+		m[in[i]] = i ;
+	}
+	
+	int ans=buildtree(pre,in,0,n-1);
+	postorder(pre[0],post);
+	int flag=0;
+	for(i=0;i<n;i++)
+	if(post[i]==v1[i])
+	continue;
+	else
+	{
+		flag=1;
+		break;
+	}
+	if(flag)
+	cout<<"no";
+	else
+	cout<<"yes";
+}
+
